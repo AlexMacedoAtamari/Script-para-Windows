@@ -1,0 +1,52 @@
+Write-Host "`n  INFORMACION DEL DISPOSITIVO `n" -ForegroundColor Green
+
+#  Sistema Operativo 
+$os = Get-CimInstance Win32_OperatingSystem
+Write-Host "`n  SISTEMA OPERATIVO" -ForegroundColor Yellow
+Write-Host "  Nombre:          $($os.Caption)
+  Version:         $($os.Version)
+  Arquitectura:    $($os.OSArchitecture)
+  Instalado el:    $($os.InstallDate)" -ForegroundColor Cyan
+
+#  Equipo 
+$cs = Get-CimInstance Win32_ComputerSystem
+Write-Host "`n  EQUIPO" -ForegroundColor Yellow
+Write-Host "  Nombre:          $($cs.Name)
+  Fabricante:      $($cs.Manufacturer)
+  Modelo:          $($cs.Model)
+  Usuario actual:  $($cs.UserName)" -ForegroundColor Cyan
+
+#  Procesador 
+$cpu = Get-CimInstance Win32_Processor
+Write-Host "`n  PROCESADOR (CPU)" -ForegroundColor Yellow
+Write-Host "  Nombre:          $($cpu.Name)
+  Nucleos:         $($cpu.NumberOfCores)
+  Hilos:           $($cpu.NumberOfLogicalProcessors)
+  Velocidad:       $($cpu.MaxClockSpeed) MHz" -ForegroundColor Cyan
+
+#  Memoria RAM 
+$ramTotal = [math]::Round($cs.TotalPhysicalMemory / 1GB, 2)
+$ramLibre = [math]::Round(($os.FreePhysicalMemory * 1KB) / 1GB, 2)
+Write-Host "`n  MEMORIA RAM" -ForegroundColor Yellow
+Write-Host "  Total:           $ramTotal GB
+  Disponible:      $ramLibre GB" -ForegroundColor Cyan
+
+#  Discos 
+Write-Host "`n  ALMACENAMIENTO" -ForegroundColor Yellow
+Get-CimInstance Win32_LogicalDisk -Filter "DriveType=3" | ForEach-Object {
+    $totalGB = [math]::Round($_.Size / 1GB, 2)
+    $libreGB = [math]::Round($_.FreeSpace / 1GB, 2)
+    Write-Host "  Unidad $($_.DeviceID)  Total: $totalGB GB   Libre: $libreGB GB" -ForegroundColor Cyan
+}
+
+#  Tarjeta grafica 
+Write-Host "`n  TARJETA GRAFICA (GPU)" -ForegroundColor Yellow
+Get-CimInstance Win32_VideoController | ForEach-Object {
+    Write-Host "  $($_.Name)" -ForegroundColor Cyan
+}
+
+#  Red 
+Write-Host "`n  RED" -ForegroundColor Yellow
+Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.IPAddress -notlike "169.*" -and $_.InterfaceAlias -notlike "*Loopback*" } | ForEach-Object {
+    Write-Host "  $($_.InterfaceAlias): $($_.IPAddress)" -ForegroundColor Cyan
+}

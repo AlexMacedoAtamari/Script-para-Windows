@@ -1,11 +1,11 @@
-Archivo .bat
+Archivo .bat (descargando)
 
-- Descargar el archivo .bat
+- Descargar el archivo .bat (del archivo "Especificaciones_del_PC.bat")
 - Ejecutar (doble click o abrir)
 - Saldrá una advertencia de Windows (darle en aceptar y se ejecutará)
 
-Con PowerShell de Windows
+Con PowerShell de Windows (sin descargar)
 
 - Abrir PowerShell de Windows a través del buscador de programas
-- Copiar todo el código
+- Copiar todo el código (del archivo "Especificaciones_del_PC_PowerShell.txt")
 - Pedirá confirmación del copiado y nos dará una advertencia (confirmamos y se ejecutará)
