@@ -1,0 +1,11 @@
+Archivo .bat
+
+- Descargar el archivo .bat
+- Ejecutar (doble click o abrir)
+- Saldrá una advertencia de Windows (darle en aceptar y se ejecutará)
+
+Con PowerShell de Windows
+
+- Abrir PowerShell de Windows a través del buscador de programas
+- Copiar todo el código
+- Pedirá confirmación del copiado y nos dará una advertencia (confirmamos y se ejecutará)
