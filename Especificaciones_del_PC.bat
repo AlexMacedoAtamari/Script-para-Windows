@@ -41,8 +41,14 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
     "Get-CimInstance Win32_VideoController | ForEach-Object { Write-Host ('  ' + $_.Name) };" ^
     "Write-Host '';" ^
     "Write-Host '  RED    ' -ForegroundColor Yellow;" ^
-    "Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.IPAddress -notlike '169.*' -and $_.InterfaceAlias -notlike '*Loopback*' } | ForEach-Object { Write-Host ('  ' + $_.InterfaceAlias + ': ' + $_.IPAddress) };"
+    "Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.IPAddress -notlike '169.*' -and $_.InterfaceAlias -notlike '*Loopback*' } | ForEach-Object { Write-Host ('  ' + $_.InterfaceAlias + ': ' + $_.IPAddress) };" ^
+    "Write-Host '';" ^
+    "$rutas = @('HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*','HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*','HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*');" ^
+    "$apps = @(Get-ItemProperty $rutas -ErrorAction SilentlyContinue | Where-Object { $_.DisplayName } | Sort-Object -Property DisplayName -Unique);" ^
+    "Write-Host ('  PROGRAMAS INSTALADOS (' + $apps.Count + ')    ') -ForegroundColor Yellow;" ^
+    "$apps | ForEach-Object { $v = ''; if ($_.DisplayVersion) { $v = '  [v' + $_.DisplayVersion + ']' }; Write-Host ('  - ' + $_.DisplayName + $v) };"
  
 
 echo.
+
 pause >nul

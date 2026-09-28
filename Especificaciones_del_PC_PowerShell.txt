@@ -50,3 +50,18 @@ Write-Host "`n  RED" -ForegroundColor Yellow
 Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.IPAddress -notlike "169.*" -and $_.InterfaceAlias -notlike "*Loopback*" } | ForEach-Object {
     Write-Host "  $($_.InterfaceAlias): $($_.IPAddress)" -ForegroundColor Cyan
 }
+
+#  Programas instalados 
+$rutas = @(
+    "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*",
+    "HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*",
+    "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*"
+)
+$apps = @(Get-ItemProperty $rutas -ErrorAction SilentlyContinue | Where-Object { $_.DisplayName } | Sort-Object -Property DisplayName -Unique)
+Write-Host "`n  PROGRAMAS INSTALADOS ($($apps.Count))" -ForegroundColor Yellow
+$apps | ForEach-Object {
+    $v = ""
+    if ($_.DisplayVersion) { $v = "  [v$($_.DisplayVersion)]" }
+    Write-Host "  - $($_.DisplayName)$v" -ForegroundColor Cyan
+}
+Write-Host ""
